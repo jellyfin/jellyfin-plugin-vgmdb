@@ -1,7 +1,8 @@
-using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Plugin.Vgmdb.Models;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
@@ -13,14 +14,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.Vgmdb.Providers
 {
-	public class VgmdbArtistImageProvider : IRemoteImageProvider
+	// todo: implement IHasOrder, but find out what it does first
+	public class VgmdbAlbumProvider : IRemoteMetadataProvider<MusicAlbum, AlbumInfo>
 	{
 		private readonly IHttpClient _httpClient;
 		private readonly IJsonSerializer _json;
 		private readonly ILogger _logger;
 		private readonly VgmdbApi _api;
 
-		public VgmdbArtistImageProvider(IHttpClient httpClient, IJsonSerializer json, ILogger logger)
+		public VgmdbAlbumProvider(IHttpClient httpClient, IJsonSerializer json, ILogger logger)
 		{
 			_httpClient = httpClient;
 			_json = json;
@@ -39,33 +41,10 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 			});
 		}
 
-		public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
-		{
-			var images = new List<RemoteImageInfo>();
+		public async Task<MetadataResult<MusicAlbum>> GetMetadata(AlbumInfo info, CancellationToken cancellationToken)
+		{ return null; }
 
-			var id = item.GetProviderId(VgmdbArtistExternalId.KEY);
-			if (id != null) //todo use a search to find id
-			{
-				var artist = await _api.GetArtistById(int.Parse(id), cancellationToken);
-
-				images.Add(new RemoteImageInfo
-				{
-					Url = artist.picture_full,
-					ThumbnailUrl = artist.picture_small
-				});
-			}
-
-			return images;
-		}
-
-		public IEnumerable<ImageType> GetSupportedImages(BaseItem item)
-		{
-			return new List<ImageType>
-			{
-				ImageType.Primary
-			};
-		}
-
-		public bool Supports(BaseItem item) => item is MusicArtist;
+		public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(AlbumInfo searchInfo, CancellationToken cancellationToken)
+		{ return null; }
 	}
 }

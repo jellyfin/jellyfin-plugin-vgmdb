@@ -20,13 +20,14 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 		private readonly IHttpClient _httpClient;
 		private readonly IJsonSerializer _json;
 		private readonly ILogger _logger;
-		internal const string RootUrl = @"https://vgmdb.info/";
+		private readonly VgmdbApi _api;
 
 		public VgmdbArtistProvider(IHttpClient httpClient, IJsonSerializer json, ILogger logger)
 		{
 			_httpClient = httpClient;
 			_json = json;
 			_logger = logger;
+			_api = new VgmdbApi(httpClient, json, logger);
 		}
 
 		public string Name => "VGMdb";
@@ -42,29 +43,20 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 
 		public async Task<MusicArtist> GetArtistById(int id, CancellationToken cancellationToken)
 		{
-			ArtistResponse result;
+			var response = await _api.GetArtistById(id, cancellationToken);
 
-			using (var response = await _httpClient.Get(new HttpRequestOptions
-			{
-				Url = RootUrl + "/artist/" + id + "?format=json",
-				CancellationToken = cancellationToken
-			}).ConfigureAwait(false))
-			{
-				result = _json.DeserializeFromStream<ArtistResponse>(response);
-			}
-
-			if (result != null)
+			if (response != null)
 			{
 				var artist = new MusicArtist();
-				artist.ProviderIds[VgmdbArtistExternalId.KEY] = result.Id.ToString();
-				artist.Name = result.name;
+				artist.ProviderIds[VgmdbArtistExternalId.KEY] = response.Id.ToString();
+				artist.Name = response.name;
 
 				var image = new ItemImageInfo();
-				image.Path = result.picture_full;
+				image.Path = response.picture_full;
 				image.Type = ImageType.Primary;
 				artist.SetImage(image, 0);
 
-				artist.Overview = result.notes;
+				artist.Overview = response.notes;
 
 				return artist;
 			}
@@ -106,16 +98,12 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 
 		public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(ArtistInfo searchInfo, CancellationToken cancellationToken)
 		{
-			var results = new List<RemoteSearchResult>();
+			var response = await _api.GetSearchResults(searchInfo.Name, cancellationToken);
 
-			using (var response = await _httpClient.Get(new HttpRequestOptions
+			var searchResults = new List<RemoteSearchResult>();
+			if (response != null)
 			{
-				Url = RootUrl + "/search/artists?format=json&q=" + WebUtility.UrlEncode(searchInfo.Name),
-				CancellationToken = cancellationToken
-			}).ConfigureAwait(false))
-			{
-				var json = _json.DeserializeFromStream<SearchResponse>(response);
-				foreach (var artistEntry in json.results.artists)
+				foreach (var artistEntry in response.results.artists)
 				{
 					var artist = await GetArtistById(artistEntry.Id, cancellationToken);
 					var result = new RemoteSearchResult();
@@ -123,11 +111,11 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 					result.Name = artist.Name;
 					result.ImageUrl = artist.PrimaryImagePath;
 
-					results.Add(result);
+					searchResults.Add(result);
 				}
 			}
 
-			return results;
+			return searchResults;
 		}
 	}
 }
