@@ -36,13 +36,25 @@ namespace Jellyfin.Plugin.Vgmdb
 			}
 		}
 
+		public async Task<AlbumResponse> GetAlbumById(int id, CancellationToken cancellationToken)
+		{
+			using (var response = await _httpClient.Get(new HttpRequestOptions
+			{
+				Url = RootUrl + "/album/" + id + "?format=json",
+				CancellationToken = cancellationToken
+			}).ConfigureAwait(false))
+			{
+				return _json.DeserializeFromStream<AlbumResponse>(response);
+			}
+		}
+
 		public async Task<SearchResponse> GetSearchResults(string name, CancellationToken cancellationToken)
 		{
 			var results = new List<RemoteSearchResult>();
 
 			using (var response = await _httpClient.Get(new HttpRequestOptions
 			{
-				Url = RootUrl + "/search/artists?format=json&q=" + WebUtility.UrlEncode(name),
+				Url = RootUrl + "/search?format=json&q=" + WebUtility.UrlEncode(name),
 				CancellationToken = cancellationToken
 			}).ConfigureAwait(false))
 			{

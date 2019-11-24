@@ -20,6 +20,8 @@ namespace Jellyfin.Plugin.Vgmdb.Models
 		public String link { get; set; }
 		public String release_date { get; set; }
 		public LocalizedString titles { get; set; }
+
+		public int Id { get => int.Parse(link.Replace("album/", "")); }
 	}
 
 	public class SearchResponseResultsArtist
@@ -46,7 +48,8 @@ namespace Jellyfin.Plugin.Vgmdb.Models
 		}
 	}
 
-	public class ArtistResponse {
+	public class ArtistResponse
+	{
 		public String name { get; set; }
 		public String picture_full { get; set; }
 		public String picture_small { get; set; }
@@ -54,5 +57,29 @@ namespace Jellyfin.Plugin.Vgmdb.Models
 		public String notes { get; set; }
 
 		public int Id { get => int.Parse(link.Replace("artist/", "")); }
+	}
+
+	public class AlbumResponse
+	{
+		public LocalizedString names { get; set; }
+		public String picture_full { get; set; }
+		public String picture_small { get; set; }
+		public String picture_thumb { get; set; }
+		public String link { get; set; }
+		public String notes { get; set; }
+
+		public List<String> categories { get; set; }
+		public List<Organisation> organisations { get; set; }
+
+		public int Id { get => int.Parse(link.Replace("album/", "")); }
+	}
+
+	public class Organisation
+	{
+		public String link { get; set; }
+		public LocalizedString names { get; set; }
+		public String role { get; set; }
+
+		public int Id { get => int.Parse(link.Replace("org/", "")); }
 	}
 }
