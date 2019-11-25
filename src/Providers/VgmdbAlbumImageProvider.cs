@@ -43,7 +43,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 		{
 			var images = new List<RemoteImageInfo>();
 
-			var id = item.GetProviderId(VgmdbAlbumProvider.KEY);
+			var id = item.GetProviderId(VgmdbAlbumExternalId.KEY);
 			if (id != null) //todo use a search to find id
 			{
 				var album = await _api.GetAlbumById(int.Parse(id), cancellationToken);
