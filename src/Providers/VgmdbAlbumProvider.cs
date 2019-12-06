@@ -63,7 +63,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 					album.AddGenre(category);
 				}
 
-				foreach (var organisation in response.organisations)
+				foreach (var organisation in response.organizations)
 				{
 					album.AddStudio(organisation.names.GetPreferred());
 				}

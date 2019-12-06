@@ -69,7 +69,7 @@ namespace Jellyfin.Plugin.Vgmdb.Models
 		public String notes { get; set; }
 
 		public List<String> categories { get; set; }
-		public List<Organisation> organisations { get; set; }
+		public List<Organisation> organizations { get; set; }
 
 		public int Id { get => int.Parse(link.Replace("album/", "")); }
 	}
