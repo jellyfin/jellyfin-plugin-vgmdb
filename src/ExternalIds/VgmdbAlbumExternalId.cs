@@ -2,15 +2,17 @@ using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 
-namespace Jellyfin.Plugin.Vgmdb.Providers
+namespace Jellyfin.Plugin.Vgmdb.ExternalIds
 {
+	/// <inheritdoc />
+	// ReSharper disable once ClassNeverInstantiated.Global
 	public class VgmdbAlbumExternalId : IExternalId
 	{
-		public static readonly string KEY = "VGMdbAlbum";
+		public const string ExternalId = "VGMdbAlbum";
 
 		public string Name => "VGMdb Album";
 
-		public string Key => KEY;
+		public string Key => ExternalId;
 
 		public string UrlFormatString => "https://vgmdb.net/album/{0}";
 
