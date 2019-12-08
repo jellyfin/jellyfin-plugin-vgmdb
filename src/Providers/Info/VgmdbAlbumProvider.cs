@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Jellyfin.Plugin.Vgmdb.Models;
+using Jellyfin.Plugin.Vgmdb.ExternalIds;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
@@ -12,22 +11,18 @@ using MediaBrowser.Model.Providers;
 using MediaBrowser.Model.Serialization;
 using Microsoft.Extensions.Logging;
 
-namespace Jellyfin.Plugin.Vgmdb.Providers
+namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 {
 	// todo: implement IHasOrder, but find out what it does first
 	public class VgmdbAlbumProvider : IRemoteMetadataProvider<MusicAlbum, AlbumInfo>
 	{
 		private readonly IHttpClient _httpClient;
-		private readonly IJsonSerializer _json;
-		private readonly ILogger _logger;
 		private readonly VgmdbApi _api;
 
-		public VgmdbAlbumProvider(IHttpClient httpClient, IJsonSerializer json, ILogger logger)
+		public VgmdbAlbumProvider(IHttpClient httpClient, IJsonSerializer json)
 		{
 			_httpClient = httpClient;
-			_json = json;
-			_logger = logger;
-			_api = new VgmdbApi(httpClient, json, logger);
+			_api = new VgmdbApi(httpClient, json);
 		}
 
 		public string Name => "VGMdb";
@@ -45,45 +40,49 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 		{
 			var response = await _api.GetAlbumById(id, cancellationToken);
 
-			if (response != null)
+			if (response == null) return null;
+			
+			var album = new MusicAlbum
 			{
-				var album = new MusicAlbum();
-				album.ProviderIds[VgmdbAlbumExternalId.KEY] = response.Id.ToString();
-				album.Name = response.names.GetPreferred();
-
-				var image = new ItemImageInfo();
-				image.Path = response.picture_full;
-				image.Type = ImageType.Primary;
-				album.SetImage(image, 0);
-
-				album.Overview = response.notes;
-
-				foreach (var category in response.categories)
+				ProviderIds =
 				{
-					album.AddGenre(category);
-				}
+					[VgmdbAlbumExternalId.ExternalId] = response.Id.ToString()
+				},
+				Name = response.names.GetPreferred()
+			};
 
-				foreach (var organisation in response.organizations)
-				{
-					album.AddStudio(organisation.names.GetPreferred());
-				}
+			var image = new ItemImageInfo
+			{
+				Path = response.picture_full,
+				Type = ImageType.Primary
+			};
+			album.SetImage(image, 0);
 
-				return album;
+			album.Overview = response.notes;
+
+			foreach (var category in response.categories)
+			{
+				album.AddGenre(category);
 			}
 
-			return null;
+			foreach (var organisation in response.organizations)
+			{
+				album.AddStudio(organisation.names.GetPreferred());
+			}
+
+			return album;
 		}
 
 		public async Task<int?> GetId(AlbumInfo info, CancellationToken cancellationToken)
 		{
-			var providedId = info.GetProviderId(VgmdbAlbumExternalId.KEY);
+			var providedId = info.GetProviderId(VgmdbAlbumExternalId.ExternalId);
 			if (providedId != null) return int.Parse(providedId);
 
 			var searchResults = await GetSearchResults(info, cancellationToken);
 
 			foreach (var result in searchResults)
 			{
-				var id = result.GetProviderId(VgmdbAlbumExternalId.KEY);
+				var id = result.GetProviderId(VgmdbAlbumExternalId.ExternalId);
 
 				if (id != null) return int.Parse(id);
 			}
@@ -99,7 +98,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 			{
 				return new MetadataResult<MusicAlbum>
 				{
-					Item = await GetAlbumById((int)id, cancellationToken)
+					Item = await GetAlbumById((int) id, cancellationToken)
 				};
 			}
 
@@ -111,18 +110,19 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 			var response = await _api.GetSearchResults(searchInfo.Name, cancellationToken);
 
 			var searchResults = new List<RemoteSearchResult>();
-			if (response != null)
+			if (response == null) return null;
+			
+			foreach (var albumEntry in response.results.albums)
 			{
-				foreach (var albumEntry in response.results.albums)
+				var album = await GetAlbumById(albumEntry.Id, cancellationToken);
+				var result = new RemoteSearchResult
 				{
-					var album = await GetAlbumById(albumEntry.Id, cancellationToken);
-					var result = new RemoteSearchResult();
-					result.ProviderIds = album.ProviderIds;
-					result.Name = album.Name;
-					result.ImageUrl = album.PrimaryImagePath;
+					ProviderIds = album.ProviderIds,
+					Name = album.Name,
+					ImageUrl = album.PrimaryImagePath
+				};
 
-					searchResults.Add(result);
-				}
+				searchResults.Add(result);
 			}
 
 			return searchResults;

@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Plugin.Vgmdb.ExternalIds;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
@@ -11,21 +11,17 @@ using MediaBrowser.Model.Providers;
 using MediaBrowser.Model.Serialization;
 using Microsoft.Extensions.Logging;
 
-namespace Jellyfin.Plugin.Vgmdb.Providers
+namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 {
 	public class VgmdbArtistImageProvider : IRemoteImageProvider
 	{
 		private readonly IHttpClient _httpClient;
-		private readonly IJsonSerializer _json;
-		private readonly ILogger _logger;
 		private readonly VgmdbApi _api;
 
-		public VgmdbArtistImageProvider(IHttpClient httpClient, IJsonSerializer json, ILogger logger)
+		public VgmdbArtistImageProvider(IHttpClient httpClient, IJsonSerializer json)
 		{
 			_httpClient = httpClient;
-			_json = json;
-			_logger = logger;
-			_api = new VgmdbApi(httpClient, json, logger);
+			_api = new VgmdbApi(httpClient, json);
 		}
 
 		public string Name => "VGMdb";
@@ -43,7 +39,8 @@ namespace Jellyfin.Plugin.Vgmdb.Providers
 		{
 			var images = new List<RemoteImageInfo>();
 
-			var id = item.GetProviderId(VgmdbArtistExternalId.KEY);
+			var id = item.GetProviderId(VgmdbArtistExternalId.ExternalId);
+			
 			if (id != null) //todo use a search to find id
 			{
 				var artist = await _api.GetArtistById(int.Parse(id), cancellationToken);
