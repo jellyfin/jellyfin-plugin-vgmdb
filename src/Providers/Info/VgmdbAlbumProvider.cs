@@ -41,7 +41,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 			var response = await _api.GetAlbumById(id, cancellationToken);
 
 			if (response == null) return null;
-			
+
 			var album = new MusicAlbum
 			{
 				ProviderIds =
@@ -50,6 +50,10 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 				},
 				Name = response.names.GetPreferred()
 			};
+
+			//todo better date parsing
+			int.TryParse(response.release_date.Split('-')[0], out var productionYear);
+			if (productionYear > 0) album.ProductionYear = productionYear;
 
 			var image = new ItemImageInfo
 			{
@@ -111,7 +115,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 
 			var searchResults = new List<RemoteSearchResult>();
 			if (response == null) return null;
-			
+
 			foreach (var albumEntry in response.results.albums)
 			{
 				var album = await GetAlbumById(albumEntry.Id, cancellationToken);
@@ -119,6 +123,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 				{
 					ProviderIds = album.ProviderIds,
 					Name = album.Name,
+					ProductionYear = album.ProductionYear,
 					ImageUrl = album.PrimaryImagePath
 				};
 

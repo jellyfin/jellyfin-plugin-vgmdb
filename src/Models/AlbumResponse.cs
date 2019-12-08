@@ -11,6 +11,8 @@ namespace Jellyfin.Plugin.Vgmdb.Models
 		public string link { get; set; }
 		public string notes { get; set; }
 
+		public string release_date { get; set; }
+
 		public List<string> categories { get; set; }
 		public List<Organisation> organizations { get; set; }
 
