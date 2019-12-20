@@ -39,17 +39,17 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 			var images = new List<RemoteImageInfo>();
 
 			var id = item.GetProviderId(VgmdbArtistExternalId.ExternalId);
-			
-			if (id != null) //todo use a search to find id
-			{
-				var artist = await _api.GetArtistById(int.Parse(id), cancellationToken);
 
-				images.Add(new RemoteImageInfo
-				{
-					Url = artist.picture_full,
-					ThumbnailUrl = artist.picture_small
-				});
-			}
+			//todo use a search to find id
+			if (id == null) return images;
+			
+			var artist = await _api.GetArtistById(int.Parse(id), cancellationToken);
+
+			images.Add(new RemoteImageInfo
+			{
+				Url = artist.picture_full,
+				ThumbnailUrl = artist.picture_small
+			});
 
 			return images;
 		}

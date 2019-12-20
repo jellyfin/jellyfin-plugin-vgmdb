@@ -39,17 +39,16 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 			var images = new List<RemoteImageInfo>();
 
 			var id = item.GetProviderId(VgmdbAlbumExternalId.ExternalId);
+			
+			//todo use a search to find id
+			if (id == null) return images;
+			var album = await _api.GetAlbumById(int.Parse(id), cancellationToken);
 
-			if (id != null) //todo use a search to find id
+			images.Add(new RemoteImageInfo
 			{
-				var album = await _api.GetAlbumById(int.Parse(id), cancellationToken);
-
-				images.Add(new RemoteImageInfo
-				{
-					Url = album.picture_full,
-					ThumbnailUrl = album.picture_small
-				});
-			}
+				Url = album.picture_full,
+				ThumbnailUrl = album.picture_small
+			});
 
 			return images;
 		}
