@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jellyfin.Controller" Version="10.4.1" />
-    <PackageReference Include="Jellyfin.Model" Version="10.4.1" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.5.0-pre1" />
+    <PackageReference Include="Jellyfin.Model" Version="10.5.0-pre1" />
   </ItemGroup>
 
 </Project>
