@@ -63,14 +63,20 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 
 			album.Overview = response.notes;
 
-			foreach (var category in response.categories)
+			if (response.categories != null)
 			{
-				album.AddGenre(category);
+				foreach (var category in response.categories)
+				{
+					album.AddGenre(category);
+				}
 			}
 
-			foreach (var organisation in response.organizations)
+			if (response.organizations != null)
 			{
-				album.AddStudio(organisation.names.GetPreferred());
+				foreach (var organisation in response.organizations)
+				{
+					album.AddStudio(organisation.names.GetPreferred());
+				}
 			}
 
 			return album;
