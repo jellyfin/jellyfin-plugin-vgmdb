@@ -1,6 +1,7 @@
 using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Providers;
 
 namespace Jellyfin.Plugin.Vgmdb.ExternalIds
 {
@@ -10,9 +11,11 @@ namespace Jellyfin.Plugin.Vgmdb.ExternalIds
 	{
 		public const string ExternalId = "VGMdbArtist";
 
-		public string Name => "VGMdb Artist";
+		public string ProviderName => "VGMdb Artist";
 
 		public string Key => ExternalId;
+		
+		public ExternalIdMediaType? Type => ExternalIdMediaType.Album;
 
 		public string UrlFormatString => "https://vgmdb.net/artist/{0}";
 
