@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.Vgmdb.ExternalIds;
@@ -14,24 +15,20 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 {
 	public class VgmdbAlbumImageProvider : IRemoteImageProvider
 	{
-		private readonly IHttpClient _httpClient;
+		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly VgmdbApi _api;
 
-		public VgmdbAlbumImageProvider(IHttpClient httpClient, IJsonSerializer json)
+		public VgmdbAlbumImageProvider(IHttpClientFactory httpClientFactory, IJsonSerializer json)
 		{
-			_httpClient = httpClient;
-			_api = new VgmdbApi(httpClient, json);
+			_httpClientFactory = httpClientFactory;
+			_api = new VgmdbApi(httpClientFactory, json);
 		}
 
 		public string Name => "VGMdb";
 
-		public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
+		public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 		{
-			return _httpClient.GetResponse(new HttpRequestOptions
-			{
-				Url = url,
-				CancellationToken = cancellationToken
-			});
+			return _httpClientFactory.CreateClient(NamedClient.Default).GetAsync(url, cancellationToken);
 		}
 
 		public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
@@ -39,7 +36,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 			var images = new List<RemoteImageInfo>();
 
 			var id = item.GetProviderId(VgmdbAlbumExternalId.ExternalId);
-			
+
 			//todo use a search to find id
 			if (id == null) return images;
 			var album = await _api.GetAlbumById(int.Parse(id), cancellationToken);
