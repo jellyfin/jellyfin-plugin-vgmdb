@@ -22,7 +22,7 @@ namespace Jellyfin.Plugin.Vgmdb
 
 		public async Task<ArtistResponse> GetArtistById(int id, CancellationToken cancellationToken)
 		{
-			var httpClient = _httpClientFactory.CreateClient();
+			var httpClient = _httpClientFactory.CreateClient(NamedClient.Default);
 			using (var response = await httpClient.GetAsync(RootUrl + "/artist/" + id + "?format=json", cancellationToken).ConfigureAwait(false))
 			{
 				await using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -32,7 +32,7 @@ namespace Jellyfin.Plugin.Vgmdb
 
 		public async Task<AlbumResponse> GetAlbumById(int id, CancellationToken cancellationToken)
 		{
-			var httpClient = _httpClientFactory.CreateClient();
+			var httpClient = _httpClientFactory.CreateClient(NamedClient.Default);
 			using (var response = await httpClient.GetAsync(RootUrl + "/album/" + id + "?format=json", cancellationToken).ConfigureAwait(false))
 			{
 				await using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -42,7 +42,7 @@ namespace Jellyfin.Plugin.Vgmdb
 
 		public async Task<SearchResponse> GetSearchResults(string name, CancellationToken cancellationToken)
 		{
-			var httpClient = _httpClientFactory.CreateClient();
+			var httpClient = _httpClientFactory.CreateClient(NamedClient.Default);
 			using (var response = await httpClient.GetAsync(RootUrl + "/search?format=json&q=" + WebUtility.UrlEncode(name), cancellationToken).ConfigureAwait(false))
 			{
 				await using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);

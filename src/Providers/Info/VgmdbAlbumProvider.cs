@@ -29,7 +29,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 
 		public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 		{
-			return _httpClientFactory.CreateClient().GetAsync(url);
+			return _httpClientFactory.CreateClient(NamedClient.Default).GetAsync(url);
 		}
 
 		public async Task<MusicAlbum> GetAlbumById(int id, CancellationToken cancellationToken)

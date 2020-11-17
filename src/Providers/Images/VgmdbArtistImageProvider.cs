@@ -28,7 +28,7 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Images
 
 		public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 		{
-			return _httpClientFactory.CreateClient().GetAsync(url);
+			return _httpClientFactory.CreateClient(NamedClient.Default).GetAsync(url);
 		}
 
 		public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
