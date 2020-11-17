@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.Vgmdb.ExternalIds;
@@ -15,24 +16,20 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 	// todo: implement IHasOrder, but find out what it does first
 	public class VgmdbAlbumProvider : IRemoteMetadataProvider<MusicAlbum, AlbumInfo>
 	{
-		private readonly IHttpClient _httpClient;
+		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly VgmdbApi _api;
 
-		public VgmdbAlbumProvider(IHttpClient httpClient, IJsonSerializer json)
+		public VgmdbAlbumProvider(IHttpClientFactory httpClientFactory, IJsonSerializer json)
 		{
-			_httpClient = httpClient;
-			_api = new VgmdbApi(httpClient, json);
+			_httpClientFactory = httpClientFactory;
+			_api = new VgmdbApi(httpClientFactory, json);
 		}
 
 		public string Name => "VGMdb";
 
-		public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
+		public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 		{
-			return _httpClient.GetResponse(new HttpRequestOptions
-			{
-				Url = url,
-				CancellationToken = cancellationToken
-			});
+			return _httpClientFactory.CreateClient().GetAsync(url);
 		}
 
 		public async Task<MusicAlbum> GetAlbumById(int id, CancellationToken cancellationToken)
