@@ -19,10 +19,10 @@ namespace Jellyfin.Plugin.Vgmdb.Providers.Info
 		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly VgmdbApi _api;
 
-		public VgmdbAlbumProvider(IHttpClientFactory httpClientFactory, IJsonSerializer json)
+		public VgmdbAlbumProvider(IHttpClientFactory httpClientFactory)
 		{
 			_httpClientFactory = httpClientFactory;
-			_api = new VgmdbApi(httpClientFactory, json);
+			_api = new VgmdbApi(httpClientFactory);
 		}
 
 		public string Name => "VGMdb";
