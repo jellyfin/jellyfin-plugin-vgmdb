@@ -1,8 +1,8 @@
 ---
 name: "VGMdb"
 guid: "44616595-5798-47ad-8658-3c09f3030505"
-version: "3"
-targetAbi: "10.8.0.0"
+version: 2
+targetAbi: "10.8.13.0"
 framework: "net6.0"
 owner: "jellyfin"
 overview: "Adds support for VGMdb to music libraries. Can provide both images and metadata for artists and albums."
@@ -12,9 +12,17 @@ description: >
 category: "Metadata"
 artifacts:
   - "Jellyfin.Plugin.Vgmdb.dll"
-changelog: |-
-  - chore(deps): bump StyleCop.Analyzers from 1.2.0-beta.376 to 1.2.0-beta.406 (#11) @dependabot
-  - Use meta ci (#8) @crobibero
+changelog: |2-
+  ### Bug Fixes ###
+  - Fix double slash in API URL's causing the plugin to never work (#20) @nielsvanvelzen
 
   ### Code or Repo Maintenance ###
   - Clean up folder structure, remove warnings (#9) @crobibero
+
+  ### Dependency updates ###
+  - chore(deps): update dependency stylecop.analyzers to v1.2.0-beta.435 (#15) @renovate
+  - chore(deps): bump StyleCop.Analyzers from 1.2.0-beta.376 to 1.2.0-beta.406 (#11) @dependabot
+
+  ### CI & build changes ###
+  - fix: meta ci workflows (#13) @h1dden-da3m0n
+  - Use meta ci (#8) @crobibero
