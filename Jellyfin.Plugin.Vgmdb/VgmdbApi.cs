@@ -10,7 +10,7 @@ namespace Jellyfin.Plugin.Vgmdb;
 
 public class VgmdbApi
 {
-    private const string RootUrl = @"https://vgmdb.info/";
+    private const string RootUrl = @"https://vgmdb.info";
     private readonly IHttpClientFactory _httpClientFactory;
 
     public VgmdbApi(IHttpClientFactory httpClientFactory)
