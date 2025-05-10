@@ -17,7 +17,5 @@ public class VgmdbAlbumExternalId : IExternalId
 
     public ExternalIdMediaType? Type => ExternalIdMediaType.Album;
 
-    public string UrlFormatString => "https://vgmdb.net/album/{0}";
-
     public bool Supports(IHasProviderIds item) => item is MusicAlbum;
 }
