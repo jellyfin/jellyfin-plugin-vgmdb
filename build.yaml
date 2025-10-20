@@ -1,7 +1,7 @@
 ---
 name: "VGMdb"
 guid: "44616595-5798-47ad-8658-3c09f3030505"
-version: 4
+version: 5
 targetAbi: "10.11.0.0"
 framework: "net9.0"
 owner: "jellyfin"
@@ -13,4 +13,4 @@ category: "Music"
 artifacts:
   - "Jellyfin.Plugin.Vgmdb.dll"
 changelog: |-
-  - 10.9 (#23) @crobibero
+  - Jellyfin 10.11 support (#27) @crobibero
