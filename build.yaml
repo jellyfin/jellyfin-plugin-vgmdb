@@ -1,8 +1,8 @@
 ---
 name: "VGMdb"
 guid: "44616595-5798-47ad-8658-3c09f3030505"
-version: 5
-targetAbi: "10.11.0.0"
+version: 6
+targetAbi: "10.11.5.0"
 framework: "net9.0"
 owner: "jellyfin"
 overview: "Adds support for VGMdb to music libraries. Can provide both images and metadata for artists and albums."
@@ -13,4 +13,9 @@ category: "Music"
 artifacts:
   - "Jellyfin.Plugin.Vgmdb.dll"
 changelog: |-
-  - Jellyfin 10.11 support (#27) @crobibero
+  - Revert "Update dependency Microsoft.Extensions.Http to v10" (#32) @Shadowghost
+
+  ### Dependency updates ###
+  - Update dependency Microsoft.Extensions.Http to 9.0.11 (#25) @[renovate[bot]](https://github.com/apps/renovate)
+  - Update dependency Microsoft.Extensions.Http to v10 (#29) @[renovate[bot]](https://github.com/apps/renovate)
+  - Update dependency StyleCop.Analyzers to 1.2.0-beta.556 (#19) @[renovate[bot]](https://github.com/apps/renovate)
