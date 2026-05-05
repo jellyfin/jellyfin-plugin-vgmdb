@@ -1,0 +1,13 @@
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/bin/Debug/net10.0/Jellyfin.Plugin.Vgmdb.deps.json
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/bin/Debug/net10.0/Jellyfin.Plugin.Vgmdb.dll
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/bin/Debug/net10.0/Jellyfin.Plugin.Vgmdb.pdb
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.csproj.AssemblyReference.cache
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.GeneratedMSBuildEditorConfig.editorconfig
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.AssemblyInfoInputs.cache
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.AssemblyInfo.cs
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.csproj.CoreCompileInputs.cache
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.sourcelink.json
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.dll
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/refint/Jellyfin.Plugin.Vgmdb.dll
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/Jellyfin.Plugin.Vgmdb.pdb
+/home/crobibero/Code/jellyfin-meta-plugins/jellyfin-plugin-vgmdb/Jellyfin.Plugin.Vgmdb/obj/Debug/net10.0/ref/Jellyfin.Plugin.Vgmdb.dll
