@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VGMdb</title>
+</head>
+<body>
+<div id="VgmdbConfigPage" data-role="page" class="page type-interior pluginConfigurationPage">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="VgmdbConfigForm">
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="ServerUrl">Server URL</label>
+                    <input id="ServerUrl" name="ServerUrl" type="url" is="emby-input" required />
+                    <div class="fieldDescription">
+                        Base URL of the VGMdb API to query. Defaults to
+                        https://vgmdb.info, the public instance. Point this at a
+                        self-hosted deployment of hufman/vgmdb &mdash; for example
+                        http://192.168.1.10:8085 &mdash; if the public one is
+                        unavailable. No trailing slash needed.
+                    </div>
+                </div>
+                <div>
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var VgmdbPluginConfig = {
+            uniqueId: '44616595-5798-47ad-8658-3c09f3030505'
+        };
+
+        document.querySelector('#VgmdbConfigPage')
+            .addEventListener('pageshow', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(VgmdbPluginConfig.uniqueId).then(function (config) {
+                    document.querySelector('#ServerUrl').value = config.ServerUrl || '';
+                    Dashboard.hideLoadingMsg();
+                });
+            });
+
+        document.querySelector('#VgmdbConfigForm')
+            .addEventListener('submit', function (e) {
+                e.preventDefault();
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(VgmdbPluginConfig.uniqueId).then(function (config) {
+                    config.ServerUrl = document.querySelector('#ServerUrl').value;
+                    ApiClient.updatePluginConfiguration(VgmdbPluginConfig.uniqueId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+                return false;
+            });
+    </script>
+</div>
+</body>
+</html>

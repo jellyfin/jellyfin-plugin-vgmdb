@@ -10,12 +10,35 @@ namespace Jellyfin.Plugin.Vgmdb;
 
 public class VgmdbApi
 {
-    private const string RootUrl = @"https://vgmdb.info";
+    private const string DefaultRootUrl = @"https://vgmdb.info";
     private readonly IHttpClientFactory _httpClientFactory;
 
     public VgmdbApi(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
+    }
+
+    /// <summary>
+    /// Gets the configured server URL, falling back to the public instance.
+    /// </summary>
+    /// <remarks>
+    /// Read per request rather than cached, so changing it on the plugin
+    /// configuration page takes effect without restarting the server. Any
+    /// trailing slash is trimmed because every caller appends an absolute
+    /// path, and "host//album/1" would 404.
+    /// </remarks>
+    private static string RootUrl
+    {
+        get
+        {
+            var configured = VgmdbPlugin.Instance?.Configuration?.ServerUrl;
+            if (string.IsNullOrWhiteSpace(configured))
+            {
+                return DefaultRootUrl;
+            }
+
+            return configured.Trim().TrimEnd('/');
+        }
     }
 
     public async Task<ArtistResponse> GetArtistByIdAsync(int id, CancellationToken cancellationToken)
