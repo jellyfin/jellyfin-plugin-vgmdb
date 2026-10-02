@@ -1,5 +1,7 @@
 # Jellyfin VGMdb
 
+## VGMDb.info has closed, so this plugin is no longer functional
+
 Plugins that adds support for VGMdb to music libraries. Can provide both images and metadata for artists and albums.
 
 ## Building
